@@ -1,0 +1,11 @@
+version: '2'
+services:
+    remotnitoring-postgresql:
+        image: postgres:9.6.5
+        # volumes:
+        #     - ~/volumes/jhipster/remotnitoring/postgresql/:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=remotnitoring
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432

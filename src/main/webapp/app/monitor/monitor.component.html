@@ -1,0 +1,28 @@
+<p>
+  monitor works!
+</p>
+
+<button type="button" (click)="startWebSocket()" class="btn btn-primary">
+  <span class="fa fa-save"></span>&nbsp;<span>startWebSocket</span>
+</button>
+
+<button type="button" (click)="stopWebSocket()" class="btn btn-primary">
+  <span class="fa fa-save"></span>&nbsp;<span>stopWebSocket</span>
+</button>
+
+
+
+<div class="table-responsive">
+  <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>Message</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let echo of echos">
+              <td>{{echo.message}}</td>
+          </tr>
+      </tbody>
+  </table>
+</div>
