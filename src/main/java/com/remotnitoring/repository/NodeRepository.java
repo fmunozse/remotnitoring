@@ -13,4 +13,8 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface NodeRepository extends JpaRepository<Node, Long> {
 
+	@Query("select node from Node node where node.user.login = ?#{principal.username}")
+	Node findByUserIsCurrentUser();
+
+	
 }

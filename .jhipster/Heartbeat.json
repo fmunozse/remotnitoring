@@ -1,0 +1,37 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "node",
+            "otherEntityName": "node",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "timestamp",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "ip",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        }
+    ],
+    "changelogDate": "20171215220459",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "heartbeat",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

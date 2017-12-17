@@ -3,6 +3,9 @@ package com.remotnitoring.domain;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -29,10 +32,12 @@ public class Node implements Serializable {
 
     @Lob
     @Column(name = "description")
+    @Type(type = "org.hibernate.type.TextType")  
     private String description;
 
     @Lob
     @Column(name = "secret")
+    @Type(type = "org.hibernate.type.TextType")
     private String secret;
 
     @Column(name = "renew_day")

@@ -3,7 +3,9 @@ import { RouterModule } from '@angular/router';
 
 import { RemotnitoringSharedModule } from '../shared';
 
-import { HOME_ROUTE, MonitorComponent } from './';
+import { HOME_ROUTE,
+         MonitorComponent,
+         MonitorService } from './';
 
 @NgModule({
     imports: [
@@ -16,6 +18,7 @@ import { HOME_ROUTE, MonitorComponent } from './';
     entryComponents: [
     ],
     providers: [
+        MonitorService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

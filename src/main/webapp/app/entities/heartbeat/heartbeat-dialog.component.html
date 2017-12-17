@@ -1,0 +1,66 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myHeartbeatLabel">Create or edit a Heartbeat</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!heartbeat.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="heartbeat.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_timestamp">Timestamp</label>
+            <div class="d-flex">
+                <input id="field_timestamp" type="datetime-local" class="form-control" name="timestamp" [(ngModel)]="heartbeat.timestamp"
+                required/>
+            </div>
+            <div [hidden]="!(editForm.controls.timestamp?.dirty && editForm.controls.timestamp?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.timestamp?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.timestamp?.errors?.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_ip">Ip</label>
+            <input type="text" class="form-control" name="ip" id="field_ip"
+                [(ngModel)]="heartbeat.ip" maxlength="100"/>
+            <div [hidden]="!(editForm.controls.ip?.dirty && editForm.controls.ip?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.ip?.errors?.maxlength">
+                   This field cannot be longer than 100 characters.
+                </small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" for="field_node">Node</label>
+            <select class="form-control" id="field_node" name="node" [(ngModel)]="heartbeat.node"  required>
+                <option *ngIf="!editForm.value.node" [ngValue]="null" selected></option>
+                <option [ngValue]="nodeOption.id === heartbeat.node?.id ? heartbeat.node : nodeOption" *ngFor="let nodeOption of nodes; trackBy: trackNodeById">{{nodeOption.name}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.node?.dirty && editForm.controls.node?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.node?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
