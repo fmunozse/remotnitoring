@@ -25,8 +25,8 @@ export class MonitorComponent implements OnInit, OnDestroy {
   itemsPerPage: any;
 
   //
-  monitorNodeDTOs: MonitorNodeDTO[];
-  echos: any[] = [];
+  nodeCards: MonitorNodeDTO[];
+  echos: MonitorNodeDTO[] = [];
 
   constructor(
     private parseLinks: JhiParseLinks,
@@ -40,7 +40,6 @@ export class MonitorComponent implements OnInit, OnDestroy {
     private echoService: EchoService,
     private monitorService: MonitorService
   ) {
-    /*
       this.itemsPerPage = ITEMS_PER_PAGE;
       this.routeData = this.activatedRoute.data.subscribe((data) => {
         this.page = data['pagingParams'].page;
@@ -48,19 +47,24 @@ export class MonitorComponent implements OnInit, OnDestroy {
         this.reverse = data['pagingParams'].ascending;
         this.predicate = data['pagingParams'].predicate;
       });
-    */
+      console.log ('this', this);
   }
 
   ngOnInit() {
+    console.log('ngOnInit')
     this.loadAll();
     this.echoService.subscribe();
     this.echoService.receive().subscribe((echo) => {
         this.showEchos(echo);
+        this.updateFromTopicNodeCards(echo);
     });
+    this.startWebSocket();
   }
 
   ngOnDestroy() {
+    console.log('ngOnDestroy')
     this.echoService.unsubscribe();
+    this.stopWebSocket();
   }
 
   loadAll() {
@@ -75,7 +79,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
     // this.totalItems = headers.get('X-Total-Count');
     // this.queryCount = this.totalItems;
     // this.page = pagingParams.page;
-    this.monitorNodeDTOs = data;
+    this.nodeCards = data;
     console.log('data', data);
     console.log('headers', headers);
   }
@@ -84,9 +88,18 @@ export class MonitorComponent implements OnInit, OnDestroy {
       this.jhiAlertService.error(error.message, null, null);
   }
 
-  showEchos(echo: any) {
+  showEchos(echo: MonitorNodeDTO) {
     console.log(echo);
-    this.echos.push(echo);
+    this.echos.unshift(echo);
+  }
+
+  updateFromTopicNodeCards(echo: MonitorNodeDTO) {
+    this.nodeCards.forEach( (monitorNodeDTO) => {
+      if (monitorNodeDTO.nodeId === echo.nodeId) {
+        monitorNodeDTO.numHeartbeats += echo.numHeartbeats ;
+        monitorNodeDTO.lastHeartbeat = echo.lastHeartbeat;
+      }
+    });
   }
 
   startWebSocket() {

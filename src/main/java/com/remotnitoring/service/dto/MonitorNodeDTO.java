@@ -1,16 +1,37 @@
 package com.remotnitoring.service.dto;
 
+import java.time.ZonedDateTime;
+
 public class MonitorNodeDTO {
 	
 	private Long  nodeId;
-	private String nodeName;
-	
+	private String nodeName;	
 	private Long numHeartbeats;
+	private ZonedDateTime lastHeartbeat;
 	
-	public MonitorNodeDTO (Long nodeId, String nodeName, Long numHeartbeats) {
+	public MonitorNodeDTO () {
+		super();
+	}
+		
+	public MonitorNodeDTO (Long nodeId, String nodeName, Long numHeartbeats, ZonedDateTime lastHeartbeat) {
 		this.nodeId = nodeId;
 		this.nodeName = nodeName;
 		this.numHeartbeats = numHeartbeats;
+		this.lastHeartbeat = lastHeartbeat;
+	}
+
+	public ZonedDateTime getLastHeartbeat() {
+		return lastHeartbeat;
+	}
+
+	public void setLastHeartbeat(ZonedDateTime lastHeartbeat) {
+		this.lastHeartbeat = lastHeartbeat;
+	}
+
+	@Override
+	public String toString() {
+		return "MonitorNodeDTO [nodeId=" + nodeId + ", nodeName=" + nodeName + ", numHeartbeats=" + numHeartbeats
+				+ ", lastHeartbeat=" + lastHeartbeat + "]";
 	}
 
 	public Long getNodeId() {

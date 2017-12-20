@@ -5,6 +5,7 @@ import { RemotnitoringSharedModule } from '../shared';
 
 import { HOME_ROUTE,
          MonitorComponent,
+         MonitorResolvePagingParams,
          MonitorService } from './';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { HOME_ROUTE,
     entryComponents: [
     ],
     providers: [
-        MonitorService
+        MonitorService,
+        MonitorResolvePagingParams
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

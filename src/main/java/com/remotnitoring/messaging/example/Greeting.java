@@ -1,5 +1,5 @@
 
-package com.remotnitoring.messaging;
+package com.remotnitoring.messaging.example;
 
 public class Greeting {
     private String message;

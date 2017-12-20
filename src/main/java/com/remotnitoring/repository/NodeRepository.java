@@ -3,6 +3,8 @@ package com.remotnitoring.repository;
 import com.remotnitoring.domain.Node;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.*;
 
 
@@ -14,7 +16,7 @@ import org.springframework.data.jpa.repository.*;
 public interface NodeRepository extends JpaRepository<Node, Long> {
 
 	@Query("select node from Node node where node.user.login = ?#{principal.username}")
-	Node findByUserIsCurrentUser();
+	Optional<Node> findByUserIsCurrentUser();
 
 	
 }

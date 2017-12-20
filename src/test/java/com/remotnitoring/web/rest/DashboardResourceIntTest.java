@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the Dashboard REST controller.
  *
- * @see DashboardResource
+ * @see MonitorResource
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = RemotnitoringApp.class)

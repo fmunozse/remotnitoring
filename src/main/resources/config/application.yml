@@ -55,18 +55,24 @@ spring:
         mode: XHTML
     cloud:
         stream:
-            bindings:
+            bindings:          
                 messageChannel:
                     destination: greetings
                     content-type: application/json
-                    partitionCount: 3
-                    partitionKeyExpression: payload.id                    
                 subscribableChannel:
                     group: remotnitoring
                     destination: greetings 
                     content-type: application/json
-                    concurrency: 3       
-                    partitioned: true            
+                outputEchoChannel:
+                    destination: echo
+                    content-type: application/json
+                    binder: kafka
+                inputEchoChannel:
+                    #group: remotnitoring  ::: No assigned in order to receive all instances the same message (like a topic)
+                    destination: echo 
+                    content-type: application/json
+                    binder: kafka
+                    
             kafka:
                 binder:
                     headers: testHeader

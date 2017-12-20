@@ -1,4 +1,4 @@
-package com.remotnitoring.messaging;
+package com.remotnitoring.messaging.example;
 
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.messaging.SubscribableChannel;

@@ -48,60 +48,13 @@ public class HeartbeatResource {
 
     private final HeartbeatService heartbeatService;
     
-    private final NodeRepository nodeRepository;
-
     private final HeartbeatQueryService heartbeatQueryService;
     
     public HeartbeatResource(HeartbeatService heartbeatService, HeartbeatQueryService heartbeatQueryService, NodeRepository nodeRepository) {
         this.heartbeatService = heartbeatService;
         this.heartbeatQueryService = heartbeatQueryService;
-        this.nodeRepository = nodeRepository;
     }
 
-    
-    @PostMapping("/heartbeats/ping")
-    @Timed
-	public ResponseEntity<Void> postMethodName(HttpServletRequest request) {
-        log.debug("REST request to ping Heartbeat : {}", request);
-        
-        //Node node = find();
-        
-	    final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));        
-	    Node node = nodeRepository.findByUserIsCurrentUser();
-
-
-        log.info("REST ip : {}", request.getRemoteAddr());
-        log.info("REST node : {}", node);
-
-        
-        Heartbeat heartbeat = new Heartbeat();
-        heartbeat.setIp(request.getRemoteAddr());
-        heartbeat.setNode(node);
-        heartbeat.setTimestamp(ZonedDateTime.now());
-        Heartbeat result = heartbeatService.save(heartbeat);
-                
-		
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("X-remotnitoringApp-ping", createHeaderResultPing(result) );
-        return ResponseEntity.ok().headers(headers).build();
-	}
-    
-    private String createHeaderResultPing (Heartbeat heartbeat) {
-    		return MessageFormat.format("Created with id {0} of {1}, node {2} from ip {3} at {4} ", 
-    				heartbeat.getId(), 
-    				heartbeat.getNode().getUser().getLogin(),
-    				heartbeat.getNode().getName(), 
-    				heartbeat.getIp(), 
-    				heartbeat.getTimestamp().toOffsetDateTime().toString() );
-    }
-    
-    private static String getClientIp(ServletServerHttpRequest request) {
-        return request.getRemoteAddress().toString();
-               
-    }
-
-    
-    
     /**
      * POST  /heartbeats : Create a new heartbeat.
      *

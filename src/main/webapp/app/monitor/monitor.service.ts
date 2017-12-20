@@ -11,7 +11,7 @@ import { ResponseWrapper, createRequestOption } from '../shared';
 @Injectable()
 export class MonitorService {
 
-    private resourceUrl = SERVER_API_URL + 'api/dashboard';
+    private resourceUrl = SERVER_API_URL + 'api/monitor';
 
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
@@ -39,7 +39,10 @@ export class MonitorService {
      */
     private convertItemFromServer(json: any): MonitorNodeDTO {
         const entity: MonitorNodeDTO = Object.assign(new MonitorNodeDTO(), json);
-        // entity.renewDay = this.dateUtils.convertLocalDateFromServer(json.renewDay);
+        entity.lastHeartbeat = this.dateUtils.convertDateTimeFromServer(json.lastHeartbeat);
+
+        console.log('entity.lastHeartbeat', entity.lastHeartbeat);
+        console.log('json.lastHeartbeat', json.lastHeartbeat);
         return entity;
     }
 

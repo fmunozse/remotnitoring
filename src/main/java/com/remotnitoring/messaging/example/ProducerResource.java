@@ -1,4 +1,4 @@
-package com.remotnitoring.messaging;
+package com.remotnitoring.messaging.example;
 
 import com.codahale.metrics.annotation.Timed;
 import org.springframework.messaging.MessageChannel;

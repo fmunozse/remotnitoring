@@ -1,4 +1,4 @@
-package com.remotnitoring.messaging;
+package com.remotnitoring.messaging.example;
 
 import static com.remotnitoring.config.WebsocketConfiguration.IP_ADDRESS;
 
@@ -67,7 +67,7 @@ public class ConsumerService {
         
         
         log.info("Received message: {}.", greeting.getMessage());
-        messagingTemplate.convertAndSend("/topic/echo", greeting);
+        //messagingTemplate.convertAndSend("/topic/echo", greeting);
 
     }
 }

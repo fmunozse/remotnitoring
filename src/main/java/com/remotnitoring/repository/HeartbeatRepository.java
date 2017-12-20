@@ -18,7 +18,7 @@ import org.springframework.data.jpa.repository.*;
 public interface HeartbeatRepository extends JpaRepository<Heartbeat, Long>, JpaSpecificationExecutor<Heartbeat> {
 
 	
-
+/*
 	@Query(value = 
 			"SELECT new com.remotnitoring.service.dto.MonitorNodeDTO "
 			+ "(heartbeat.node.id,"
@@ -28,7 +28,19 @@ public interface HeartbeatRepository extends JpaRepository<Heartbeat, Long>, Jpa
 		    + "FROM Heartbeat heartbeat "
 		    //+ "WHERE ep.serie.id = ?2 AND ep.season=?1 "
 		    + "GROUP BY heartbeat.node.id, heartbeat.node.name"
-		  )
+		  )*/
+	
+	@Query(value = 
+			"SELECT new com.remotnitoring.service.dto.MonitorNodeDTO "
+			+ "(node.id,"
+			+ " node.name,"
+			+ " (SELECT count(heartbeat) FROM Heartbeat heartbeat WHERE heartbeat.node = node) as total, "	
+			+ " (SELECT max (heartbeat.timestamp) FROM Heartbeat heartbeat WHERE heartbeat.node = node) as maxTimestamp "
+			//+ " SELECT count(1) FROM Heartbeat heartbeat"
+			+ ") " 
+		    + "FROM Node node "
+		    //+ "WHERE ep.serie.id = ?2 AND ep.season=?1 "
+		  )	
 	List<MonitorNodeDTO> countAllHeartBeatsPerNode();
 	
 }
