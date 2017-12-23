@@ -53,12 +53,12 @@ export class MonitorComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log('ngOnInit')
     this.loadAll();
+    this.startWebSocket();
     this.echoService.subscribe();
     this.echoService.receive().subscribe((echo) => {
         this.showEchos(echo);
         this.updateFromTopicNodeCards(echo);
     });
-    this.startWebSocket();
   }
 
   ngOnDestroy() {
