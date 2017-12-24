@@ -12,7 +12,9 @@ import { MonitorService } from './monitor.service';
 @Component({
   selector: 'jhi-monitor',
   templateUrl: './monitor.component.html',
-  styles: []
+  styleUrls: [
+    'monitor.css'
+  ]
 })
 export class MonitorComponent implements OnInit, OnDestroy {
 

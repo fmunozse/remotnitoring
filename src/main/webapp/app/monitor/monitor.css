@@ -1,0 +1,12 @@
+@keyframes highlight {
+    0% {
+      background-color: yellow;
+    }
+    100% {
+        background-color: none;
+    } 
+  }
+  
+  .echo-monitor-animation {
+    animation: highlight 1s;
+  }

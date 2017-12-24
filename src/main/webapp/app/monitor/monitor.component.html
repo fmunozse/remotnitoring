@@ -30,7 +30,7 @@
           </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let echo of echos">
+          <tr class="echo-monitor-animation" *ngFor="let echo of echos">
               <td>{{echo.nodeName}}</td>
               <td>{{echo.lastHeartbeat | date:'medium'  }}</td>
           </tr>
