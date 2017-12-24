@@ -163,10 +163,7 @@ public class UserService {
         user.setPassword(encryptedPassword);
         user.setActivated(true);
         user.setActivationKey(RandomUtil.generateActivationKey());
-        
-        log.debug("*** paco password: {}", password);
-        log.debug("*** paco encryptedPassword: {}", encryptedPassword);
-                
+
         user.setActivated(true);
         userRepository.save(user);
         log.debug("Created Information for User: {}", user);
@@ -245,10 +242,7 @@ public class UserService {
                 
                 String encryptedPassword = passwordEncoder.encode(password);
                 user.setPassword(encryptedPassword);
-                
-                log.debug("*** paco password: {}", password);
-                log.debug("*** paco encryptedPassword: {}", encryptedPassword);
-                
+                                
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })

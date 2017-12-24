@@ -8,6 +8,7 @@ public class MonitorNodeDTO {
 	private String nodeName;	
 	private Long numHeartbeats;
 	private ZonedDateTime lastHeartbeat;
+	private String ip;
 	
 	public MonitorNodeDTO () {
 		super();
@@ -18,6 +19,14 @@ public class MonitorNodeDTO {
 		this.nodeName = nodeName;
 		this.numHeartbeats = numHeartbeats;
 		this.lastHeartbeat = lastHeartbeat;
+	}
+	
+	public MonitorNodeDTO (Long nodeId, String nodeName, ZonedDateTime lastHeartbeat, String ip) {
+		this.nodeId = nodeId;
+		this.nodeName = nodeName;
+		this.numHeartbeats = 1L;
+		this.lastHeartbeat = lastHeartbeat;
+		this.ip = ip;
 	}
 
 	public ZonedDateTime getLastHeartbeat() {
@@ -56,6 +65,14 @@ public class MonitorNodeDTO {
 
 	public void setNumHeartbeats(Long numHeartbeats) {
 		this.numHeartbeats = numHeartbeats;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 	
 

@@ -11,10 +11,14 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.remotnitoring.domain.Heartbeat;
+import com.remotnitoring.domain.Node;
 import com.remotnitoring.messaging.Channels;
 import com.remotnitoring.messaging.example.ConsumerChannel;
 import com.remotnitoring.messaging.example.ConsumerService;
 import com.remotnitoring.messaging.example.Greeting;
+import com.remotnitoring.repository.HeartbeatRepository;
+import com.remotnitoring.repository.NodeRepository;
 import com.remotnitoring.service.dto.MonitorNodeDTO;
 
 @Service
@@ -24,8 +28,14 @@ public class EchoConsumerService {
 
     private SimpMessagingTemplate messagingTemplate;
     
-    public EchoConsumerService (SimpMessagingTemplate messagingTemplate) {
+    private HeartbeatService heartbeatService;
+    
+    private NodeRepository nodeRepository;
+    
+    public EchoConsumerService (SimpMessagingTemplate messagingTemplate, HeartbeatService heartbeatService, NodeRepository nodeRepository) {
     		this.messagingTemplate = messagingTemplate;
+    		this.heartbeatService = heartbeatService;
+    		this.nodeRepository = nodeRepository;
     		log.info("Constructor: EchoConsumerService {}", this.toString());
     }
     
@@ -35,8 +45,19 @@ public class EchoConsumerService {
         log.info("Received message.headers: {}.", message.getHeaders().toString());
         
         MonitorNodeDTO monitorNodeDTO = message.getPayload();
-                
         log.info("Received message: {}.", monitorNodeDTO.toString());
+        
+        //Find node
+        Node node = nodeRepository.findOne(monitorNodeDTO.getNodeId());
+        
+        //Create heatbeat and save it
+        Heartbeat heartbeat = new Heartbeat();
+        heartbeat.setIp(monitorNodeDTO.getIp());
+        heartbeat.setNode(node);
+        heartbeat.setTimestamp(monitorNodeDTO.getLastHeartbeat());
+        heartbeatService.save(heartbeat);
+                
+        //Send to websocket        
         messagingTemplate.convertAndSend("/topic/echo", monitorNodeDTO);
 
     }    

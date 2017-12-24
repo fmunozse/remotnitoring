@@ -40,9 +40,7 @@ import com.remotnitoring.web.rest.errors.InternalServerErrorException;
 public class MonitorResource {
 
     private final Logger log = LoggerFactory.getLogger(MonitorResource.class);
-    
-    private HeartbeatService heartbeatService;
-    
+        
     private HeartbeatRepository heartbeatRepository;
         
     private NodeRepository nodeRepository;
@@ -54,7 +52,6 @@ public class MonitorResource {
     		NodeRepository nodeRepository) {
 		
     		super();
-		this.heartbeatService = heartbeatService;
 		this.heartbeatRepository = heartbeatRepository;
         this.outputEchoChannel = channels.outputEchoChannel();
         this.nodeRepository = nodeRepository;
@@ -92,37 +89,31 @@ public class MonitorResource {
 
         log.info("REST ip : {}", request.getRemoteAddr());
         log.info("REST node : {}", node);
+                        
         
-        Heartbeat heartbeat = new Heartbeat();
-        heartbeat.setIp(request.getRemoteAddr());
-        heartbeat.setNode(node);
-        heartbeat.setTimestamp(ZonedDateTime.now());
-        Heartbeat result = heartbeatService.save(heartbeat);
-                
+        MonitorNodeDTO dto = new MonitorNodeDTO(node.getId(), node.getName(), ZonedDateTime.now(), request.getRemoteAddr() );
         
         //Sent Menssage
-        sentMessage (node, heartbeat);
+        sentMessage (dto);
         
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-remotnitoringApp-ping", createHeaderResultPing(result) );
+        headers.add("X-remotnitoringApp-ping", createHeaderResultPing(dto, userLogin) );
         return ResponseEntity.ok().headers(headers).build();
 	}    
     
     
-    private void sentMessage (Node node, Heartbeat heartbeat) {    	
-    		MonitorNodeDTO dto = new MonitorNodeDTO(node.getId(), node.getName(), 1L, heartbeat.getTimestamp());    	
+    private void sentMessage (MonitorNodeDTO dto) {    	    	
     		outputEchoChannel.send(MessageBuilder.withPayload(dto)
         		   .build());        
     }
     
 
-    private String createHeaderResultPing (Heartbeat heartbeat) {
-    		return MessageFormat.format("Created with id {0} of {1}, node {2} from ip {3} at {4} ", 
-    				heartbeat.getId(), 
-    				heartbeat.getNode().getUser().getLogin(),
-    				heartbeat.getNode().getName(), 
-    				heartbeat.getIp(), 
-    				heartbeat.getTimestamp().toOffsetDateTime().toString() );
+    private String createHeaderResultPing (MonitorNodeDTO dto, String userLogin) {
+    		return MessageFormat.format("Ping done at {3} for Node[{0}:{1}] from IP:{2}", 
+    				userLogin,
+    				dto.getNodeName(), 
+    				dto.getIp(), 
+    				dto.getLastHeartbeat().toOffsetDateTime().toString() );
     }
     
     
