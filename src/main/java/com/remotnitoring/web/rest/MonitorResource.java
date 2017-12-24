@@ -88,7 +88,7 @@ public class MonitorResource {
 	    final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> 
 	    		new InternalServerErrorException("Current user login not found"));        
 	    final Node node = nodeRepository.findByUserIsCurrentUser().orElseThrow(() -> 
-	    		new InternalServerErrorException("Current user login [" + userLogin + "] not found") );
+	    		new InternalServerErrorException("Current user login [" + userLogin + "] doent have a node linked") );
 
         log.info("REST ip : {}", request.getRemoteAddr());
         log.info("REST node : {}", node);

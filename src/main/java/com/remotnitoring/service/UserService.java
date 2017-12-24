@@ -133,6 +133,45 @@ public class UserService {
         log.debug("Created Information for User: {}", user);
         return user;
     }
+    
+    
+    public User createUser(UserDTO userDTO, String password) {
+        User user = new User();
+        user.setLogin(userDTO.getLogin());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setImageUrl(userDTO.getImageUrl());
+        if (userDTO.getLangKey() == null) {
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        } else {
+            user.setLangKey(userDTO.getLangKey());
+        }
+        if (userDTO.getAuthorities() != null) {
+            Set<Authority> authorities = userDTO.getAuthorities().stream()
+                .map(authorityRepository::findOne)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
+        /*
+        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        user.setPassword(encryptedPassword);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());*/
+        
+        String encryptedPassword = passwordEncoder.encode(password);
+        user.setPassword(encryptedPassword);
+        user.setActivated(true);
+        user.setActivationKey(RandomUtil.generateActivationKey());
+        
+        log.debug("*** paco password: {}", password);
+        log.debug("*** paco encryptedPassword: {}", encryptedPassword);
+                
+        user.setActivated(true);
+        userRepository.save(user);
+        log.debug("Created Information for User: {}", user);
+        return user;
+    }
 
     /**
      * Update basic information (first name, last name, email, language) for the current user.
@@ -183,6 +222,39 @@ public class UserService {
             })
             .map(UserDTO::new);
     }
+    
+    
+    public Optional<UserDTO> updateUser(UserDTO userDTO, String password) {
+        return Optional.of(userRepository
+            .findOne(userDTO.getId()))
+            .map(user -> {
+                user.setLogin(userDTO.getLogin());
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                user.setEmail(userDTO.getEmail());
+                user.setImageUrl(userDTO.getImageUrl());
+                user.setActivated(userDTO.isActivated());
+                user.setLangKey(userDTO.getLangKey());
+                Set<Authority> managedAuthorities = user.getAuthorities();
+                managedAuthorities.clear();
+                userDTO.getAuthorities().stream()
+                    .map(authorityRepository::findOne)
+                    .forEach(managedAuthorities::add);
+                
+               
+                
+                String encryptedPassword = passwordEncoder.encode(password);
+                user.setPassword(encryptedPassword);
+                
+                log.debug("*** paco password: {}", password);
+                log.debug("*** paco encryptedPassword: {}", encryptedPassword);
+                
+                log.debug("Changed Information for User: {}", user);
+                return user;
+            })
+            .map(UserDTO::new);
+    }
+    
 
     public void deleteUser(String login) {
         userRepository.findOneByLogin(login).ifPresent(user -> {
