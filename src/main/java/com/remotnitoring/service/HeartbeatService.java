@@ -2,6 +2,9 @@ package com.remotnitoring.service;
 
 import com.remotnitoring.domain.Heartbeat;
 import com.remotnitoring.repository.HeartbeatRepository;
+
+import java.time.ZonedDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,10 @@ public class HeartbeatService {
 
     public HeartbeatService(HeartbeatRepository heartbeatRepository) {
         this.heartbeatRepository = heartbeatRepository;
+    }
+    
+    public void purgeOldHeartbeats () {
+    		//heartbeatRepository.deleteByTimestampLessThan (ZonedDateTime.now().minusDays(7));    	
     }
 
     /**

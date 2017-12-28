@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 import { SERVER_API_URL } from '../app.constants';
 
@@ -21,8 +21,20 @@ export class MonitorService {
             .map((res: Response) => this.convertResponse(res));
     }
 
-    delete(id: number): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
+    queryLastest4hMonitorNode(req?: any): Observable<Response> {
+        return this.http.get(`${this.resourceUrl}/lastest-4h-monitorNode`);
+    }
+
+    queryFindHeardbeatsByDatePerNode(req: any): Observable<Response> {
+        const params: URLSearchParams = new URLSearchParams();
+        params.set('fromDate', req.fromDate);
+        params.set('toDate', req.toDate);
+
+        const options = {
+            search: params
+        };
+
+        return this.http.get(`${this.resourceUrl}/heartbeatsByDatePerNode`, options);
     }
 
     private convertResponse(res: Response): ResponseWrapper {
@@ -40,9 +52,6 @@ export class MonitorService {
     private convertItemFromServer(json: any): MonitorNodeDTO {
         const entity: MonitorNodeDTO = Object.assign(new MonitorNodeDTO(), json);
         entity.lastHeartbeat = this.dateUtils.convertDateTimeFromServer(json.lastHeartbeat);
-
-        console.log('entity.lastHeartbeat', entity.lastHeartbeat);
-        console.log('json.lastHeartbeat', json.lastHeartbeat);
         return entity;
     }
 

@@ -20,6 +20,17 @@
     &nbsp;
 </p>
 
+<div class="row">
+    <div class="col-md-11">
+        <nvd3 #nvd3 [options]="pingChartOptions" [data]="pingChartData" class="with-3d-shadow with-transitions"></nvd3>        
+    </div>
+</div>
+
+
+<p>
+        &nbsp;
+</p>
+    
 
 <div class="table-responsive">
   <table class="table table-striped">
@@ -27,12 +38,14 @@
           <tr>
               <th>Node</th>
               <th>time</th>
+              <th>IP</th>
           </tr>
       </thead>
       <tbody>
           <tr class="echo-monitor-animation" *ngFor="let echo of echos">
               <td>{{echo.nodeName}}</td>
               <td>{{echo.lastHeartbeat | date:'medium'  }}</td>
+              <td>{{echo.ip}}</td>
           </tr>
       </tbody>
   </table>

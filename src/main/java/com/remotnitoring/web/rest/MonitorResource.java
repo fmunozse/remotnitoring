@@ -1,8 +1,13 @@
 package com.remotnitoring.web.rest;
 
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +23,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.remotnitoring.domain.Heartbeat;
@@ -64,16 +70,58 @@ public class MonitorResource {
     @Timed
     public ResponseEntity<List<MonitorNodeDTO>> lastSituation() {
         log.debug("REST request to get last-situation Heartbeats per Node");
-
-    		List<MonitorNodeDTO> lMonitorNodeDTO =  heartbeatRepository.countAllHeartBeatsPerNode();
-    		
+    		List<MonitorNodeDTO> lMonitorNodeDTO =  heartbeatRepository.countLastHeartBeatsPerNode(ZonedDateTime.now().minusMinutes(60));
     		
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-MonitorNodeDTO-Total-Count", Long.toString(lMonitorNodeDTO.size()));        
         return new ResponseEntity<>(lMonitorNodeDTO, headers, HttpStatus.OK);
 
     }
-
+    
+    
+    
+    @GetMapping("/lastest-4h-monitorNode")
+    @Timed
+    public ResponseEntity<Map<String, List<MonitorNodeDTO>>> lastest4hMonitorNode () {    	
+    		log.debug("REST lastest4hMonitorNode");
+    	
+    		Map<String, List<MonitorNodeDTO>> result = new LinkedHashMap();
+    	
+    		List<Node> lNodes = nodeRepository.findAll();
+    		for (Node node : lNodes) {
+			List<MonitorNodeDTO> l = heartbeatRepository.findLastestMonitorByNodeOrderByTimestamp(
+					ZonedDateTime.now().minusHours(4),
+					node);
+			result.put(node.getName(), l);			
+		}
+    	    	
+    		return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    
+    @GetMapping("/heartbeatsByDatePerNode")
+    @Timed
+    public ResponseEntity<Map<String, List<Heartbeat>>> heartbeatsByDatePerNode(
+            @RequestParam(value = "fromDate") LocalDate fromDate,
+            @RequestParam(value = "toDate") LocalDate toDate    		
+    		) {
+    	
+    		log.debug("REST heartbeatsByDatePerNode fromDate:{} toDate:{}" , fromDate, toDate);
+    	
+    		Map<String, List<Heartbeat>> result = new LinkedHashMap();
+    	
+    		List<Node> lNodes = nodeRepository.findAll();
+    		for (Node node : lNodes) {
+			List<Heartbeat> l = heartbeatRepository.findByTimestampBetweenAndNodeOrderByTimestampDesc(
+					fromDate.atStartOfDay(ZoneOffset.UTC),
+					toDate.atStartOfDay(ZoneOffset.UTC),
+					node);
+			result.put(node.getName(), l);			
+		}
+    	    	
+    		return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
 
     @PostMapping("/heartbeats/ping")
     @Timed
