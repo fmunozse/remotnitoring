@@ -61,5 +61,5 @@ public interface HeartbeatRepository extends JpaRepository<Heartbeat, Long>, Jpa
 	
 	List <Heartbeat> findByTimestampBetweenAndNodeOrderByTimestampDesc (ZonedDateTime fromDate, ZonedDateTime toDate, Node node);
 
-	//void deleteByTimestampLessThan(ZonedDateTime minusDays);
+	void deleteByTimestampLessThan(ZonedDateTime minusDays);
 }

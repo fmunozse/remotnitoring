@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,11 @@ public class HeartbeatService {
         this.heartbeatRepository = heartbeatRepository;
     }
     
+    @Scheduled(cron="0 0 1 * * *")
     public void purgeOldHeartbeats () {
-    		//heartbeatRepository.deleteByTimestampLessThan (ZonedDateTime.now().minusDays(7));    	
+    		ZonedDateTime purgeDateTime = ZonedDateTime.now().minusDays(7);
+    		log.info("Purging old heartbeats. Deleted the until {}" , purgeDateTime);
+    		heartbeatRepository.deleteByTimestampLessThan (purgeDateTime);   	
     }
 
     /**
