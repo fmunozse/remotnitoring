@@ -113,11 +113,11 @@ node {
 
 def version() {
     String path = pwd();
-    // def matcher = readFile("${path}/pom.xml") =~ '<version>(.+)</version>'
-    // return matcher ? matcher[0][1] : null
+    def matcher = readFile("${path}/pom.xml") =~ '<version>(.+)</version>'
+    return matcher ? matcher[0][1] : null
     
-	def project = new XmlSlurper().parseText(readFile('pom.xml'))
-	def pomv = project.version.text()
-	return pomv    
+	//def project = new XmlSlurper().parseText(readFile('pom.xml'))
+	//def pomv = project.version.text()
+	//return pomv    
 }
 
