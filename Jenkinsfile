@@ -71,26 +71,6 @@ node {
         archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
     }
 
-    def dockerImage
-    stage('build docker') {
-        sh "cp -R src/main/docker target/"
-        sh "cp target/*.war target/docker/"
-        dockerImage = docker.build('${DOCKER_IMAGE}', 'target/docker')
-    }
-    
-    stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://registry.hub.docker.com', credentialsId_docker) {
-            dockerImage.push("latest")
-            dockerImage.push("${dockerTag}")
-        }
-    }
-        
-    
-
     stage ('versioning and docker?') {
         timeout(time: 1, unit: 'HOURS') {
           input 'Generate docker version and push?'
@@ -111,18 +91,6 @@ node {
         }
     }
 
-    stage('Push image') {
-        /* Finally, we'll push the image with two tags:
-         * First, the incremental build number from Jenkins
-         * Second, the 'latest' tag.
-         * Pushing multiple tags is cheap, as all the layers are reused. */
-        docker.withRegistry('https://registry.hub.docker.com', credentialsId_docker) {
-            app.push("${DOCKER_IMAGE}:latest")
-            app.push("latest")
-        }
-    }
-    
-/*
     stage('creating docker') {
     		echo "aaa"
         sh "./mvnw -Pprod dockerfile:build"
@@ -140,8 +108,6 @@ node {
         sh "docker push ${dockerTag}"
 
     }
-    */
-
 
 }
 
