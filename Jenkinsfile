@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def DOCKER_IMAGE="fmunozse/smurfhouse"
+def DOCKER_IMAGE="fmunozse/remotnitoring"
 def GIT_PROJECT="github.com/fmunozse/remotnitoring.git"
 def GIT_USER_EMAIL="ci.fmunoze@gmail.com"
 def GIT_USER_NAME="ci-fmunozse"
