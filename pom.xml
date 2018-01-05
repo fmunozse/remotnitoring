@@ -4,7 +4,7 @@
 
     <groupId>com.remotnitoring</groupId>
     <artifactId>remotnitoring</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
     <packaging>war</packaging>
     <name>Remotnitoring</name>
 
@@ -559,7 +559,7 @@
                 </executions>
                 -->
                 <configuration>
-                    <repository>remotnitoring</repository>
+                    <repository>fmunozse/remotnitoring</repository>
                     <tag>latest</tag>
                     <contextDirectory>${project.build.directory}</contextDirectory>
                 </configuration>
