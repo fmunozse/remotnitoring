@@ -3,32 +3,71 @@
     <h2><span>Node</span> {{node.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span>Name</span></dt>
-        <dd>
-            <span>{{node.name}}</span>
-        </dd>
-        <dt><span>Description</span></dt>
-        <dd>
-            <span>{{node.description}}</span>
-        </dd>
-        <dt><span>Secret</span></dt>
-        <dd>
-            <span>{{node.secret}}</span>
-        </dd>
-        <dt><span>Renew Day</span></dt>
-        <dd>
-            <span>{{node.renewDay | date:'mediumDate'}}</span>
-        </dd>
-        <dt><span>Model</span></dt>
-        <dd>
-            <span>{{node.model}}</span>
-        </dd>
-        <dt><span>User</span></dt>
-        <dd>
-            {{node.user?.login}}
-        </dd>
-    </dl>
+    <ngb-tabset>
+        <ngb-tab title="Info">
+            <ng-template ngbTabContent>
+            
+                <dl class="row-md jh-entity-details">
+                    <dt><span>Name</span></dt>
+                    <dd>
+                        <span>{{node.name}}</span>
+                    </dd>
+                    <dt><span>Description</span></dt>
+                    <dd>
+                        <span [innerHTML]="node.description">{{node.description}}</span>
+                    </dd>
+                    <dt><span>Renew Day</span></dt>
+                    <dd>
+                        <span>{{node.renewDay | date:'mediumDate'}}</span>
+                    </dd>
+                    <dt><span>Model</span></dt>
+                    <dd>
+                        <span>{{node.model}}</span>
+                    </dd>
+                    <dt><span>User</span></dt>
+                    <dd>
+                        {{node.user?.login}}
+                    </dd>
+                </dl>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Secret">
+            <ng-template ngbTabContent>
+                <dl class="row-md jh-entity-details">
+                    <dt>
+                        <span>Secret encrypt</span>
+                    </dt>
+                    <dd>
+    <pre>{{node.secret}}</pre>
+                    </dd>
+
+                    <dt>
+                        <span>Password</span>
+                    </dt>
+                    <dd>
+                        <form class="form-inline">
+                            <div class="form-group">                                
+                                <input type="password" id="inputPassword" 
+                                    class="form-control mx-sm-3" aria-describedby="passwordHelpInline"
+                                    (keyup)="onKeyPassword($event)" >
+                                <small id="passwordHelpInline" class="text-muted">
+                                Introduce your code to decrypt the secret.
+                                </small>
+                            </div>
+                        </form>                        
+                    </dd>
+
+                    <dt>
+                        <span>Secret decrypt</span>
+                    </dt>
+                    <dd>
+    <pre>{{secretDecrypt}}</pre>
+                    </dd>
+
+                </dl>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
 
     <button type="submit"
             (click)="previousState()"

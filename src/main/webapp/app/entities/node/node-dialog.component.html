@@ -7,65 +7,114 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" [hidden]="!node.id">
-            <label for="id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                   [(ngModel)]="node.id" readonly />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_name">Name</label>
-            <input type="text" class="form-control" name="name" id="field_name"
-                [(ngModel)]="node.name" required maxlength="200"/>
-            <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.name?.errors?.required">
-                   This field is required.
-                </small>
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.name?.errors?.maxlength">
-                   This field cannot be longer than 200 characters.
-                </small>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_description">Description</label>
-            <textarea class="form-control" name="description" id="field_description"
-                [(ngModel)]="node.description" ></textarea>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_secret">Secret</label>
-            <textarea class="form-control" name="secret" id="field_secret"
-                [(ngModel)]="node.secret" ></textarea>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_renewDay">Renew Day</label>
-            <div class="input-group">
-                <input id="field_renewDay" type="text" class="form-control" name="renewDay" ngbDatepicker  #renewDayDp="ngbDatepicker" [(ngModel)]="node.renewDay"
-                />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-secondary" (click)="renewDayDp.toggle()"><i class="fa fa-calendar"></i></button>
-                </span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" for="field_model">Model</label>
-            <input type="text" class="form-control" name="model" id="field_model"
-                [(ngModel)]="node.model" maxlength="200"/>
-            <div [hidden]="!(editForm.controls.model?.dirty && editForm.controls.model?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.model?.errors?.maxlength">
-                   This field cannot be longer than 200 characters.
-                </small>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label class="form-control-label" for="field_user">User</label>
-            <select class="form-control" id="field_user" name="user" [(ngModel)]="node.user" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="userOption.id === node.user?.id ? node.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
-            </select>
-        </div>
+        <ngb-tabset>
+            <ngb-tab title="Info">
+                <ng-template ngbTabContent>
+
+                    <div class="form-group" [hidden]="!node.id">
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control" id="id" name="id"
+                            [(ngModel)]="node.id" readonly />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_name">Name</label>
+                        <input type="text" class="form-control" name="name" id="field_name"
+                            [(ngModel)]="node.name" required maxlength="200"/>
+                        <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                            <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.name?.errors?.required">
+                            This field is required.
+                            </small>
+                            <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.name?.errors?.maxlength">
+                            This field cannot be longer than 200 characters.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_description">Description</label>
+                        <textarea class="form-control" name="description" id="field_description"
+                            [(ngModel)]="node.description" ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_renewDay">Renew Day</label>
+                        <div class="input-group">
+                            <input id="field_renewDay" type="text" class="form-control" name="renewDay" ngbDatepicker  #renewDayDp="ngbDatepicker" [(ngModel)]="node.renewDay"
+                            />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-secondary" (click)="renewDayDp.toggle()"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_model">Model</label>
+                        <input type="text" class="form-control" name="model" id="field_model"
+                            [(ngModel)]="node.model" maxlength="200"/>
+                        <div [hidden]="!(editForm.controls.model?.dirty && editForm.controls.model?.invalid)">
+                            <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.model?.errors?.maxlength">
+                            This field cannot be longer than 200 characters.
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_user">User</label>
+                        <select class="form-control" id="field_user" name="user" [(ngModel)]="node.user" >
+                            <option [ngValue]="null"></option>
+                            <option [ngValue]="userOption.id === node.user?.id ? node.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
+                        </select>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Secret">
+                <ng-template ngbTabContent>
+                    &nbsp;
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="form-control-label" for="field_password">Password </label>
+                        </div>
+                        <div class="col-6">
+                                <label class="form-control-label" for="field_passwordConfirm">Password Confirm </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="password" id="field_password" 
+                                class="form-control" aria-describedby="passwordHelpInline"
+                                [(ngModel)]="fieldPassword"  name="fieldPassword"
+                                (keyup)="onKeyPassword($event)" >
+                            <small id="passwordHelpInline" class="text-muted">
+                            Introduce your code to decrypt the secret.
+                            </small>                            
+                        </div>
+                        <div class="col-6">
+                            <input type="password" id="field_passwordConfirm" 
+                                class="form-control" aria-describedby="passwordHelpInline"
+                                [(ngModel)]="fieldPasswordConfirm" name="fieldPasswordConfirm" 
+                                (keyup)="onKeyPasswordConfirm($event)" >
+                            <small id="passwordHelpInline" class="text-muted">
+                            Repeat the pwd to can edit the secret decrypt
+                            </small>
+                        </div>
+                    </div> 
+                    <div class="form-group">
+                            <label class="form-control-label" for="field_secret">Secret Decrypt</label>
+                            <textarea class="form-control" name="secretDecrypt" id="field_secretDecrypt"
+                                [(ngModel)]="secretDecrypt" [readonly]="!isAllowEditSecret"
+                                (keyup)="onKeySecrect($event)"  rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-control-label" for="field_secret">Secret Encrypt</label>
+                        <textarea class="form-control" name="secret" id="field_secret"
+                            [(ngModel)]="node.secret" rows="4" readonly ></textarea>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+
+        </ngb-tabset>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">

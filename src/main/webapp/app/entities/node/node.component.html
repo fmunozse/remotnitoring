@@ -18,8 +18,6 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="name"><span>Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="description"><span>Description</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="secret"><span>Secret</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="renewDay"><span>Renew Day</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="model"><span>Model</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="user.login"><span>User</span> <span class="fa fa-sort"></span></th>
@@ -29,9 +27,9 @@
             <tbody>
             <tr *ngFor="let node of nodes ;trackBy: trackId">
                 <td><a [routerLink]="['../node', node.id ]">{{node.id}}</a></td>
-                <td>{{node.name}}</td>
-                <td>{{node.description}}</td>
-                <td>{{node.secret}}</td>
+                <td>{{node.name}} 
+                    <span class="fa fa-info-circle" [ngbTooltip]="node.description" *ngIf="node.description" ></span>
+                </td>
                 <td>{{node.renewDay | date:'mediumDate'}}</td>
                 <td>{{node.model}}</td>
                 <td>
