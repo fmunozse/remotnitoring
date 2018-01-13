@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
+import * as crypto from 'crypto-js';
 
 import { Node } from './node.model';
 import { NodeService } from './node.service';
@@ -16,6 +17,9 @@ export class NodeDetailComponent implements OnInit, OnDestroy {
     private subscription: Subscription;
     private eventSubscriber: Subscription;
 
+    public isCollapsed = true;
+    public secretDecrypt = '';
+
     constructor(
         private eventManager: JhiEventManager,
         private dataUtils: JhiDataUtils,
@@ -29,6 +33,15 @@ export class NodeDetailComponent implements OnInit, OnDestroy {
             this.load(params['id']);
         });
         this.registerChangeInNodes();
+    }
+
+    onKeyPassword(event: any) {
+        const bytes  = crypto.AES.decrypt(this.node.secret, event.target.value);
+        try {
+            this.secretDecrypt = bytes.toString(crypto.enc.Utf8);
+        } catch (e) {
+            this.secretDecrypt = '';
+        }
     }
 
     load(id) {

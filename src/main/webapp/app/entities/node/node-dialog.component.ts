@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
+import * as crypto from 'crypto-js';
 
 import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -20,9 +21,16 @@ export class NodeDialogComponent implements OnInit {
 
     node: Node;
     isSaving: boolean;
+    isAllowEditSecret = false;
 
     users: User[];
     renewDayDp: any;
+    secretDecrypt = '';
+    secretOriginalValue: any;
+    secretChanged = false;
+
+    fieldPassword = '';
+    fieldPasswordConfirm = '';
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -37,7 +45,68 @@ export class NodeDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.userService.query()
-            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; } , (res: ResponseWrapper) => this.onError(res.json));
+        this.secretOriginalValue = this.node.secret ;
+    }
+
+    updateSecrets() {
+        if (this.fieldPasswordConfirm !== '' && this.fieldPasswordConfirm === this.fieldPassword) {
+            this.isAllowEditSecret = true;
+            if (this.secretDecrypt !== '') {
+                const ciphertext = crypto.AES.encrypt(this.secretDecrypt, this.fieldPasswordConfirm);
+                this.node.secret = ciphertext.toString();
+            }
+
+        } else {
+
+            // In case pwds are different is not allow edit and it should be back to original value the secret
+            this.isAllowEditSecret = false;
+            this.node.secret = this.secretOriginalValue;
+
+            if (this.fieldPassword !== '') {
+                const bytes  = crypto.AES.decrypt(this.node.secret, this.fieldPassword);
+                try {
+                    this.secretDecrypt = bytes.toString(crypto.enc.Utf8);
+                } catch (e) {
+                    this.secretDecrypt = '';
+                }
+            }
+        }
+    }
+
+    onKeyPassword(event: any) {
+        // const pwd = event.target.value;
+        /*
+        const bytes  = crypto.AES.decrypt(this.node.secret, this.fieldPassword);
+        try {
+            this.secretDecrypt = bytes.toString(crypto.enc.Utf8);
+        } catch (e) {
+            this.secretDecrypt = '';
+        }
+        */
+        this.updateSecrets();
+    }
+
+    onKeyPasswordConfirm(event: any) {
+        // const pwdConfirm = event.target.value;
+        /*
+        if (this.fieldPasswordConfirm !== '' && this.fieldPasswordConfirm === this.fieldPassword) {
+            this.isAllowEditSecret = true;
+        } else {
+            this.isAllowEditSecret = false;
+            console.log (this.secretOriginalValue);
+            this.node.secret = this.secretOriginalValue;
+        }
+        */
+        this.updateSecrets();
+    }
+
+    onKeySecrect(event: any) {
+        /*
+        const ciphertext = crypto.AES.encrypt(this.secretDecrypt, this.fieldPasswordConfirm);
+        this.node.secret = ciphertext.toString();
+        */
+        this.updateSecrets();
     }
 
     byteSize(field) {
