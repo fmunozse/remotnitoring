@@ -1,7 +1,87 @@
 # remotnitoring
-This application was generated using JHipster 4.11.1, you can find documentation and help at [http://www.jhipster.tech/documentation-archive/v4.11.1](http://www.jhipster.tech/documentation-archive/v4.11.1).
+
+## Introduction
+Application created to try to do simple remote monitoring. The idea is simple, clients makes REST call to a SERVER which record the pings/heartbeats.
+
+This application is the SERVER that provide a REST endpoint to can do the ping (and login)
+
+From point of view of architecure, it has been created using JHipster but also like a proof of concept has been included:
+
+* KAFKA: [http://kafka.apache.org/](http://kafka.apache.org/). The endpoint PING publish a message to topic and with a service subscribe to the topic read the message and persist the record. For the communication with KAFKA, it has been used [spring-cloud-stream](https://cloud.spring.io/spring-cloud-stream/) 
+
+* Websocket: [spring-websocket](https://docs.spring.io/spring/docs/4.0.1.RELEASE/spring-framework-reference/html/websocket.html) using STOMP messaging protocol. Basically, the service subscribe to the topic, a part of persist the record, also generate a message STOMP to inform to web layer.
+
+* crypto-js: [https://github.com/brix/crypto-js](https://github.com/brix/crypto-js). Library JS to can encrypt or decrypt a "secret" field at web layer. The algorith used AES which required that user introduce a pwd to can encrypt or decrypt.
+
+
+
+## Architecture
+See diagram of how works the ping/heartbeat
+![img/Architecture-remotnitoring.png](img/Architecture-remotnitoring.png)
+
+
+## Deployment
+The easy way is using docker-compose. See app.yml
+```
+app.yml 
+version: '2'
+services:
+    remotnitoring-app:
+        image: fmunozse/remotnitoring
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://remotnitoring-postgresql:5432/remotnitoring
+            - SPRING_DATASOURCE_USERNAME=remotnitoring
+            - SPRING_DATASOURCE_PASSWORD=password            
+            - JHIPSTER_SLEEP=30 # gives time for the database to boot before the application
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka
+            - SPRING_CLOUD_STREAM_KAFKA_BINDER_ZK_NODES=zookeeper
+        ports:
+            - 80:8080
+
+    zookeeper:
+        image: wurstmeister/zookeeper:3.4.6
+
+    kafka:
+        image: wurstmeister/kafka:0.10.1.1
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: <IP local host: localhost>
+            KAFKA_ADVERTISED_PORT: 9092
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_CREATE_TOPICS: "echo:1:1"
+        ports:
+            - 9092:9092
+
+    remotnitoring-postgresql:
+        image: postgres:9.6.5
+        volumes:
+            - /root/remotnitoring/postgresql/data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_USER=remotnitoring
+            - POSTGRES_PASSWORD=password
+
+    remotnitoring-postgresql-backup:
+        image: fmunozse/pg-cron-backups:9.6.5
+        volumes:
+          - /root/remotnitoring/backups/:/data/backups/
+        environment:
+          - DB_HOST=remotnitoring-postgresql
+          - DB_NAME=remotnitoring
+          - DB_USER=remotnitoring
+          - DB_PASS=password
+          - CRON_SCHEDULE=30 23 * * *
+          - MAIL_GMAIL_USER=remotnitoring.demo.span@gmail.com
+          - MAIL_GMAIL_PWD=password
+          - MAIL_TO=info.span@gmail.com
+          - MAIL_FROM=remotnitoring.demo.span@gmail.com
+```
+
+
+
 
 ## Development
+This application was generated using JHipster 4.11.1, you can find documentation and help at [http://www.jhipster.tech/documentation-archive/v4.11.1](http://www.jhipster.tech/documentation-archive/v4.11.1).
+
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
