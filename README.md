@@ -17,8 +17,15 @@ From point of view of architecure, it has been created using JHipster but also l
 
 ## Architecture
 See diagram of how works the ping/heartbeat
-![img/Architecture-remotnitoring.png](img/Architecture-remotnitoring.png)
+![Architecture-remotnitoring.png](img/Architecture-remotnitoring.png)
 
+
+## Funcionallity
+
+### Heartbeats 
+> Dashboard
+
+![Dashboard-heartbeats.png](img/Dashboard-heartbeats.png)
 
 ## Deployment
 The easy way is using docker-compose. See app.yml
