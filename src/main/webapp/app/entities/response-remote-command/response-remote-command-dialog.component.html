@@ -1,0 +1,55 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myResponseRemoteCommandLabel">Create or edit a Response Remote Command</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!responseRemoteCommand.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="responseRemoteCommand.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_whenExecuted">When Executed</label>
+            <div class="d-flex">
+                <input id="field_whenExecuted" type="datetime-local" class="form-control" name="whenExecuted" [(ngModel)]="responseRemoteCommand.whenExecuted"
+                />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_logResult">Log Result</label>
+            <textarea class="form-control" name="logResult" id="field_logResult"
+                [(ngModel)]="responseRemoteCommand.logResult" ></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_codReturn">Cod Return</label>
+            <input type="text" class="form-control" name="codReturn" id="field_codReturn"
+                [(ngModel)]="responseRemoteCommand.codReturn" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" for="field_requestRemoteCommand">Request Remote Command</label>
+            <select class="form-control" id="field_requestRemoteCommand" name="requestRemoteCommand" [(ngModel)]="responseRemoteCommand.requestRemoteCommand"  required>
+                <option *ngIf="!editForm.value.requestRemoteCommand" [ngValue]="null" selected></option>
+                <option [ngValue]="requestRemoteCommandOption.id === responseRemoteCommand.requestRemoteCommand?.id ? responseRemoteCommand.requestRemoteCommand : requestRemoteCommandOption" *ngFor="let requestRemoteCommandOption of requestremotecommands; trackBy: trackRequestRemoteCommandById">{{requestRemoteCommandOption.description}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.requestRemoteCommand?.dirty && editForm.controls.requestRemoteCommand?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.requestRemoteCommand?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

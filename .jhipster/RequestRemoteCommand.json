@@ -1,0 +1,47 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "node",
+            "otherEntityName": "node",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipName": "responseRemoteCommand",
+            "otherEntityName": "responseRemoteCommand",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "requestRemoteCommand"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1000"
+        },
+        {
+            "fieldName": "command",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "StatusRemoteCommand",
+            "fieldValues": "Pending,Completed"
+        }
+    ],
+    "changelogDate": "20180123205653",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "request_remote_command",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

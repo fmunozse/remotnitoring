@@ -1,0 +1,65 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myRequestRemoteCommandLabel">Create or edit a Request Remote Command</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!requestRemoteCommand.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="requestRemoteCommand.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_description">Description</label>
+            <input type="text" class="form-control" name="description" id="field_description"
+                [(ngModel)]="requestRemoteCommand.description" required maxlength="1000"/>
+            <div [hidden]="!(editForm.controls.description?.dirty && editForm.controls.description?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.description?.errors?.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.description?.errors?.maxlength">
+                   This field cannot be longer than 1000 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_command">Command</label>
+            <textarea class="form-control" name="command" id="field_command"
+                [(ngModel)]="requestRemoteCommand.command" ></textarea>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" for="field_status">Status</label>
+            <select class="form-control" name="status" [(ngModel)]="requestRemoteCommand.status" id="field_status" >
+                <option value="Pending">Pending</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" for="field_node">Node</label>
+            <select class="form-control" id="field_node" name="node" [(ngModel)]="requestRemoteCommand.node"  required>
+                <option *ngIf="!editForm.value.node" [ngValue]="null" selected></option>
+                <option [ngValue]="nodeOption.id === requestRemoteCommand.node?.id ? requestRemoteCommand.node : nodeOption" *ngFor="let nodeOption of nodes; trackBy: trackNodeById">{{nodeOption.name}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.node?.dirty && editForm.controls.node?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.node?.errors?.required">
+                This field is required.
+            </small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

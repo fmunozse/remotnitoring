@@ -1,0 +1,74 @@
+<div>
+    <h2>
+        <span>Response Remote Commands</span>
+        <button class="btn btn-primary float-right jh-create-entity create-response-remote-command" [routerLink]="['/', { outlets: { popup: ['response-remote-command-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Response Remote Command
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="responseRemoteCommands">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="whenExecuted"><span>When Executed</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="logResult"><span>Log Result</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="codReturn"><span>Cod Return</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="requestRemoteCommand.description"><span>Request Remote Command</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let responseRemoteCommand of responseRemoteCommands ;trackBy: trackId">
+                <td><a [routerLink]="['../response-remote-command', responseRemoteCommand.id ]">{{responseRemoteCommand.id}}</a></td>
+                <td>{{responseRemoteCommand.whenExecuted | date:'medium'}}</td>
+                <td>{{responseRemoteCommand.logResult}}</td>
+                <td>{{responseRemoteCommand.codReturn}}</td>
+                <td>
+                    <div *ngIf="responseRemoteCommand.requestRemoteCommand">
+                        <a [routerLink]="['../request-remote-command', responseRemoteCommand.requestRemoteCommand?.id ]" >{{responseRemoteCommand.requestRemoteCommand?.description}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../response-remote-command', responseRemoteCommand.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'response-remote-command/'+ responseRemoteCommand.id + '/edit'} }]"
+                                replaceUrl="true"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'response-remote-command/'+ responseRemoteCommand.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        <div *ngIf="responseRemoteCommands && responseRemoteCommands.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [maxSize]="5" [pageSize]="itemsPerPage" [(page)]="page" (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
+        </div>
+</div>

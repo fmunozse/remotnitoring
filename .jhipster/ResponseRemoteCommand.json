@@ -1,0 +1,35 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "requestRemoteCommand",
+            "otherEntityName": "requestRemoteCommand",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "description"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "whenExecuted",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "logResult",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
+        },
+        {
+            "fieldName": "codReturn",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180123210222",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "response_remote_command",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

@@ -1,0 +1,39 @@
+
+<div *ngIf="responseRemoteCommand">
+    <h2><span>Response Remote Command</span> {{responseRemoteCommand.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>When Executed</span></dt>
+        <dd>
+            <span>{{responseRemoteCommand.whenExecuted | date:'medium'}}</span>
+        </dd>
+        <dt><span>Log Result</span></dt>
+        <dd>
+            <span>{{responseRemoteCommand.logResult}}</span>
+        </dd>
+        <dt><span>Cod Return</span></dt>
+        <dd>
+            <span>{{responseRemoteCommand.codReturn}}</span>
+        </dd>
+        <dt><span>Request Remote Command</span></dt>
+        <dd>
+            <div *ngIf="responseRemoteCommand.requestRemoteCommand">
+                <a [routerLink]="['/request-remote-command', responseRemoteCommand.requestRemoteCommand?.id]">{{responseRemoteCommand.requestRemoteCommand?.description}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'response-remote-command/'+ responseRemoteCommand.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>
