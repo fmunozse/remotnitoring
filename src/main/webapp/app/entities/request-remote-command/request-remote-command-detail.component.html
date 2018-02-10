@@ -37,3 +37,19 @@
         <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
     </button>
 </div>
+
+<div *ngIf="responseRemoteCommands">
+    <div *ngFor="let responseRemoteCommand of responseRemoteCommands ;trackBy: trackId">
+
+            <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{responseRemoteCommand.whenExecuted | date:'medium'}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">code return: {{responseRemoteCommand.codReturn}}</h6>
+<pre>
+{{responseRemoteCommand.logResult}}
+</pre>                                                            
+
+                    </div>
+                </div>        
+    </div>
+</div>

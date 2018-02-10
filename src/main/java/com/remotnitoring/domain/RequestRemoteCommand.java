@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +36,7 @@ public class RequestRemoteCommand implements Serializable {
 
     @Lob
     @Column(name = "command")
+    @Type(type = "org.hibernate.type.TextType")
     private String command;
 
     @Enumerated(EnumType.STRING)

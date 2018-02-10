@@ -44,6 +44,13 @@ export class ResponseRemoteCommandService {
             .map((res: Response) => this.convertResponse(res));
     }
 
+    getResponseRemoteCommandsByRequest(id: number, req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        console.log('options', options);
+        return this.http.get(`/api/remote-command/${id}`, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
     delete(id: number): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }
