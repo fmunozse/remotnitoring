@@ -31,6 +31,10 @@ node {
 
     stage ('Set Version') {
         echo "Running ${buildVersion} - CommitNumber: ${commitNumber} on ${workspace}. dockerTag: ${dockerTag}. BranchName: ${env.BRANCH_NAME}"
+        
+        currentBuild.displayName = "${buildVersion}"
+        
+        
         sh "./mvnw -B versions:set -DgenerateBackupPoms=false -DnewVersion=${buildVersion}"
     }
 
