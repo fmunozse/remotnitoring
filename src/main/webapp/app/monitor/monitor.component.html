@@ -3,12 +3,16 @@
     <div class="col-md-3" *ngFor="let nodeCard of nodeCards">
             <div class="card">
                <div class="card-body">
-                    <h4 class="card-title">{{nodeCard.nodeName}}</h4>
+                    <h4 class="card-title">
+                        <a [routerLink]="['../node', nodeCard.nodeId ]" >
+                            {{nodeCard.nodeName}}
+                        </a>
+                    </h4>
                     <p class="card-text">
                             <h1 class="text-center"><span class="badge badge-pill badge-primary">{{nodeCard.numHeartbeats}}</span></h1>
                     </p>
                     <footer class="blockquote-footer">
-                        Last {{nodeCard.lastHeartbeat | date:'medium' }} - id: {{nodeCard.nodeId}}
+                        Lastest {{nodeCard.lastHeartbeat | date:'medium' }}
                     </footer>
                 </div>
             </div>

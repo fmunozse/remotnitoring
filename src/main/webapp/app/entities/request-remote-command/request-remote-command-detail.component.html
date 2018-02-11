@@ -43,7 +43,11 @@
 
             <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{responseRemoteCommand.whenExecuted | date:'medium'}}</h5>
+                        <h5 class="card-title">
+                            <a [routerLink]="['/response-remote-command', responseRemoteCommand.id]">
+                                {{responseRemoteCommand.whenExecuted | date:'medium'}}
+                            </a>
+                        </h5>
                         <h6 class="card-subtitle mb-2 text-muted">code return: {{responseRemoteCommand.codReturn}}</h6>
 <pre>
 {{responseRemoteCommand.logResult}}

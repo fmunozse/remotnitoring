@@ -20,8 +20,7 @@ public interface ResponseRemoteCommandRepository extends JpaRepository<ResponseR
 
 	
 	@Query("select responseRemoteCommand from ResponseRemoteCommand responseRemoteCommand "
-			+ " where responseRemoteCommand.requestRemoteCommand.node.user.login = ?#{principal.username} "
-			+ "   and responseRemoteCommand.requestRemoteCommand.id=?1")
+			+ " where responseRemoteCommand.requestRemoteCommand.id=?1")
 	Page<ResponseRemoteCommand> findByIdRequestAndIsCurrentUser(Long idRequest, Pageable pageable);
 	
 }

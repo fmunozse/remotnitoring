@@ -80,7 +80,7 @@ public class MonitorResource {
     
     
     
-    @GetMapping("/lastest-4h-monitorNode")
+    @GetMapping("/lastest-monitorNode")
     @Timed
     public ResponseEntity<Map<String, List<MonitorNodeDTO>>> lastest4hMonitorNode () {    	
     		log.debug("REST lastest4hMonitorNode");
@@ -90,7 +90,7 @@ public class MonitorResource {
     		List<Node> lNodes = nodeRepository.findAll();
     		for (Node node : lNodes) {
 			List<MonitorNodeDTO> l = heartbeatRepository.findLastestMonitorByNodeOrderByTimestamp(
-					ZonedDateTime.now().minusHours(4),
+					ZonedDateTime.now().minusHours(1),
 					node);
 			result.put(node.getName(), l);			
 		}

@@ -86,7 +86,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
     });
 
     // Data for chart
-    this.monitorService.queryLastest4hMonitorNode().subscribe((res: ResponseWrapper) => {
+    this.monitorService.queryLastestMonitorNode().subscribe((res: ResponseWrapper) => {
         this.pingChart = res.json ();
         this.printChart();
         // console.log('pingChartData', this.pingChartData);
@@ -95,7 +95,7 @@ export class MonitorComponent implements OnInit, OnDestroy {
 
   private printChart() {
     const startDate = new Date();
-    startDate.setHours(startDate.getHours() - 4);
+    startDate.setHours(startDate.getHours() - 1);
 
     this.pingChartOptions = {... D3ChartService.getChartConfig() };
     if (this.pingChart) {

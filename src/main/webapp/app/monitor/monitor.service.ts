@@ -21,8 +21,8 @@ export class MonitorService {
             .map((res: Response) => this.convertResponse(res));
     }
 
-    queryLastest4hMonitorNode(req?: any): Observable<Response> {
-        return this.http.get(`${this.resourceUrl}/lastest-4h-monitorNode`);
+    queryLastestMonitorNode(req?: any): Observable<Response> {
+        return this.http.get(`${this.resourceUrl}/lastest-monitorNode`);
     }
 
     queryFindHeardbeatsByDatePerNode(req: any): Observable<Response> {
